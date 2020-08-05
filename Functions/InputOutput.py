@@ -1,7 +1,4 @@
-import os
-import numpy as np
 import json
-import datetime
 
 
 def get_config(file_path):
@@ -29,20 +26,3 @@ def write_config(file_path, data):
     if file_path:
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)
-
-
-def datetime_string():
-    '''
-    Grab current date and time and format a string for file naming.
-    Args:
-        none
-    Returns:
-        string: <string> YearMonthDayHourMinute string
-    '''
-    date_time = datetime.datetime.now()
-    string = (f'{date_time.strftime("%Y")}'
-              f'{date_time.strftime("%m")}'
-              f'{date_time.strftime("%d")}'
-              f'{date_time.strftime("%H")}'
-              f'{date_time.strftime("%M")}')
-    return string

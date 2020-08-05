@@ -2,10 +2,10 @@ import os
 import cmath
 import numpy as np
 import functools as ftl
-import Functions.InputOutput as io
-from operator import itemgetter
 import scipy.optimize as opt
+from operator import itemgetter
 import matplotlib.pyplot as plt
+import Functions.InputOutput as io
 import Functions.PhysicsMaths as pm
 
 # Organisation
@@ -49,6 +49,8 @@ n_textstring = ','.join([f'{ns}' for ns in n])
 title_string = f'wg:{wg[1]}nm layer:{l1[1]}nm RIU:{n_textstring}'
 out_n_textstring = '_'.join([f'{ns}' for ns in n])
 outname_string = f'{wg[1]}_{l1[1]}_{out_n_textstring}_{datetimestring}.png'
+outtxt_string = f'{wg[1]}_{l1[1]}_{out_n_textstring}_{datetimestring}.txt'
+outtxt_path = os.path.join(dir_paths["slabwg"], outtxt_string)
 
 # Plotting
 fig, ax = plt.subplots(1, 1, figsize=[10, 7])
@@ -56,6 +58,8 @@ cb = ax.pcolor(acc_layer_thicknesses, n_guesses, beta_mat_out.T)
 fig.colorbar(cb)
 for neff in n_eff.T:
     ax.plot(acc_layer_thicknesses, neff.real, 'wo', ms=2)
+    with open(outtxt_path, 'a') as f:
+        f.write(f'\n{neff.real}')
 ax.set_ylim([cov[0], wg[0]])
 ax.set_xlabel('Accumulation Layer Thickness', fontsize=14, fontweight='bold')
 ax.set_ylabel(r'$n_{eff}$', fontsize=14, fontweight='bold')
