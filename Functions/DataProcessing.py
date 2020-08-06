@@ -1,4 +1,3 @@
-import os
 import numpy as np
 
 
@@ -9,7 +8,7 @@ def effective_index_finder(file_path,
     data = np.genfromtxt(file_path, delimiter=',')
     columns = len(data[0])
     for i in range(0, columns):
-        column = data[:,i]
+        column = data[:, i]
         uniques = np.unique([round(x, 1) for x in column])
         means = []
         for y in uniques:
@@ -19,7 +18,7 @@ def effective_index_finder(file_path,
                     meanarray.append(z)
                 else:
                     pass
-            if len(meanarray)==0:
+            if len(meanarray) == 0:
                 pass
             else:
                 means.append(sum(meanarray) / len(meanarray))

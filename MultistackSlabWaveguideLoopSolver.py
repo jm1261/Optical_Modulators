@@ -73,5 +73,6 @@ for dn in delta_n:
     fig.clf()
     plt.close(fig)
 
+    # Data Processing
     dp.effective_index_finder(file_path=outtxt_path,
                               row_header=acc_layer_thicknesses)
