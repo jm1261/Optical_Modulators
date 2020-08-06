@@ -1,19 +1,18 @@
 import os
-import cmath
 import numpy as np
-import functools as ftl
 import scipy.optimize as opt
 from operator import itemgetter
 import matplotlib.pyplot as plt
 import Functions.InputOutput as io
 import Functions.PhysicsMaths as pm
+import Functions.Organisation as org
 
 # Organisation
 root = os.getcwd()
 dir_paths = io.get_config(file_path=os.path.join(root, 'Dirpaths.config'))
 params = io.get_config(file_path=os.path.join(
                        root, 'SlabWaveguideParams.config'))
-datetimestring = io.datetime_string()
+datetimestring = org.datetime_string()
 lm0, sub, wg, l1, l2, cov = itemgetter(
     "lm0", "Sub", "Wg", "L1", "L2", "Cov")(params)
 
@@ -31,9 +30,9 @@ n_eff = np.ones((len(acc_layer_thicknesses), len(beta_in)))
 # Calculations
 for x, t in enumerate(thicknesses):
     for y, b_in in enumerate(beta_in):
-        beta_mat_out[x, y] = abs(pm.multilayer_optimisation(b_in, t, n, k0))
+        beta_mat_out[x, y] = abs(pm.multilayer_opt(b_in, t, n, k0))
         try:
-            beta_out, r = opt.newton(pm.multilayer_optimisation,
+            beta_out, r = opt.newton(pm.multilayer_opt,
                                      x0=b_in,
                                      args=(t, n, k0),
                                      maxiter=1000,
@@ -41,7 +40,7 @@ for x, t in enumerate(thicknesses):
                                      full_output=True)
         except:
             beta_out = k0
-        if abs(pm.multilayer_optimisation(beta_out, t, n, k0).real)<0.1:
+        if abs(pm.multilayer_opt(beta_out, t, n, k0).real) < 0.1:
             n_eff[x, y] = beta_out.real / k0
 
 # Organisation
