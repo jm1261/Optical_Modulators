@@ -3,7 +3,7 @@ import numpy as np
 import functools as ftl
 
 
-def multilayer_optimisation(beta, d, n, k_0):
+def multilayer_opt(beta, d, n, k_0):
     '''
     Multilayer dispersion matrix taken from a series of notes found at
     fotonica.intec.ugent.be/download/ocs131.pdf. Calculates the k vectors at

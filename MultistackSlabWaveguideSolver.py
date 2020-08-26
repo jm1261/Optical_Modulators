@@ -1,19 +1,18 @@
 import os
-import cmath
 import numpy as np
-import functools as ftl
-import Functions.InputOutput as io
-from operator import itemgetter
 import scipy.optimize as opt
+from operator import itemgetter
 import matplotlib.pyplot as plt
+import Functions.InputOutput as io
 import Functions.PhysicsMaths as pm
+import Functions.Organisation as org
 
 # Organisation
 root = os.getcwd()
 dir_paths = io.get_config(file_path=os.path.join(root, 'Dirpaths.config'))
 params = io.get_config(file_path=os.path.join(
                        root, 'SlabWaveguideParams.config'))
-datetimestring = io.datetime_string()
+datetimestring = org.datetime_string()
 lm0, sub, wg, l1, l2, cov = itemgetter(
     "lm0", "Sub", "Wg", "L1", "L2", "Cov")(params)
 
@@ -31,9 +30,9 @@ n_eff = np.ones((len(acc_layer_thicknesses), len(beta_in)))
 # Calculations
 for x, t in enumerate(thicknesses):
     for y, b_in in enumerate(beta_in):
-        beta_mat_out[x, y] = abs(pm.multilayer_optimisation(b_in, t, n, k0))
+        beta_mat_out[x, y] = abs(pm.multilayer_opt(b_in, t, n, k0))
         try:
-            beta_out, r = opt.newton(pm.multilayer_optimisation,
+            beta_out, r = opt.newton(pm.multilayer_opt,
                                      x0=b_in,
                                      args=(t, n, k0),
                                      maxiter=1000,
@@ -41,7 +40,7 @@ for x, t in enumerate(thicknesses):
                                      full_output=True)
         except:
             beta_out = k0
-        if abs(pm.multilayer_optimisation(beta_out, t, n, k0).real)<0.1:
+        if abs(pm.multilayer_opt(beta_out, t, n, k0).real) < 0.1:
             n_eff[x, y] = beta_out.real / k0
 
 # Organisation
@@ -49,6 +48,8 @@ n_textstring = ','.join([f'{ns}' for ns in n])
 title_string = f'wg:{wg[1]}nm layer:{l1[1]}nm RIU:{n_textstring}'
 out_n_textstring = '_'.join([f'{ns}' for ns in n])
 outname_string = f'{wg[1]}_{l1[1]}_{out_n_textstring}_{datetimestring}.png'
+outtxt_string = f'{wg[1]}_{l1[1]}_{out_n_textstring}_{datetimestring}.txt'
+outtxt_path = os.path.join(dir_paths["slabwg"], outtxt_string)
 
 # Plotting
 fig, ax = plt.subplots(1, 1, figsize=[10, 7])
@@ -56,6 +57,8 @@ cb = ax.pcolor(acc_layer_thicknesses, n_guesses, beta_mat_out.T)
 fig.colorbar(cb)
 for neff in n_eff.T:
     ax.plot(acc_layer_thicknesses, neff.real, 'wo', ms=2)
+    with open(outtxt_path, 'a') as f:
+        f.write(f'\n{neff.real}')
 ax.set_ylim([cov[0], wg[0]])
 ax.set_xlabel('Accumulation Layer Thickness', fontsize=14, fontweight='bold')
 ax.set_ylabel(r'$n_{eff}$', fontsize=14, fontweight='bold')
