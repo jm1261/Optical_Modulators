@@ -1,9 +1,9 @@
-# Accumulation Layer Multistack Slab Waveguide Solver
+# Accumulation Layer Multistack Slab Waveguide Loop Solver
 
 ## Organisation
 
 * root treated as current working directory.
-* dir_paths is a json config file containing the relevant directory paths.
+* dir_paths is a json config rile containing the relevant directory paths.
 * params is a json config file containing the following parameters:
   * lambda0 = incident wavelength (nm)
   * Substrate = [refractive index, extinction coefficient, thickness (nm)]
@@ -18,8 +18,9 @@
 
 ## Parameters
 
-* alt is given as the accumulation layer thickness and is a set range dependent on the material in question. This is a varying parameter that is the key to this particaular waveguide solver.
+* alt is given as the accumulation layer thickness and is a set range dependent on the material in question. This is a varying parameter that is the key to this particular waveguide solver.
 * Using the alt range, we set the thicknesses of the waveguide layers, where the accumulation layer is a sub-section of layer 1 and the total thickness remains constant.
+* This loop solver loops though a refractive index range of a particular layer.
 * We then set the refractive indices of the layers using the params dictionary, and use them to give the simulation a starting refractive index guess range.
 * Calculate the incident k-vector for the incident wavelength and use it to calculate the propagation (beta) into the waveguide.
 * Finally we set up the output matrices, which have the shape of accumulation layer thickness against the propagation guesses in (which is the shape of the graph output too).
