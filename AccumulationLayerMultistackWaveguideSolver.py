@@ -15,7 +15,7 @@ params = io.get_config(file_path=os.path.join(root, 'SlabWGParams.config'))
 lm0, sub, wg, l1, l2, cov = itemgetter(
     "lambda0", "Substrate", "Waveguide", "Layer1", "Layer2", "Cover")(params)
 dt_string = org.datetime_string()
-out_path = os.path.join(dir_paths["slabwg"], 'Accumulation_Layer')
+out_path = os.path.join(dir_paths["slabwg"], "Accumulation_Layer")
 org.check_dir_exists(out_path)
 
 # Parameters
