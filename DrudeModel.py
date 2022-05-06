@@ -22,20 +22,23 @@ def tick_function(X):
 
 # Organisation
 root = os.getcwd()
-dir_paths = io.get_config(file_path=os.path.join(root, "Dirpaths.config"))
-params = io.get_config(file_path=os.path.join(root, "DrudeModelParams.config"))
+dir_paths = io.get_config(file_path=os.path.join(root, '..', "Dirpaths.config"))
 datetimestring = org.datetime_string()
-lm0, mstar, eps, ns = itemgetter("lm0", "mstar", "eps_inf", "ns")(params)
 
 # Parameters
 c = 3E8  # Speed of light
 e = 1.60217662E-19  # Electron charge
 eps0 = 8.854187812813E-12  # Permittivity free space
 e_m = 9.10938356E-31  # Electron mass
+mstar = 0.35
+eps = 3.5  # eps inf
+lm0 = 635  # nm
 m = e_m * mstar
-f_THz = np.arange(901, 1, -1)
-wav_range = c / (f_THz * 1E12)
+#f_THz = np.arange(901, 1, -1)
+#wav_range = c / (f_THz * 1E12)
 omega = f_THz * 1E12 * 2 * np.pi
+ns = np.arange(-2, 2, 0.1)
+ns *= 1E14  # cm^2
 
 # Calculations
 plasma_freq = [((n * 1E6) * (e ** 2)) / (eps0 * m) for n in ns]
