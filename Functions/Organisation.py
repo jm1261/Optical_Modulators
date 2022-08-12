@@ -78,18 +78,19 @@ def find_files(dir_path,
 
 
 def find_path(default,
+              title,
               dir_path=False,
               file_path=False,
               file_type=False):
     '''
-    Find path is an interactive path finding tool. Using tkinter, find path
-    allows the user to select a directory or file path (depending on args)
-    and returns the path to that directory or file. If no option is entered
-    the function returns a reminder string.
+    Interactive path finder. Uses tkinter to select directory of file path(s).
+    Returns path to directory or file(s).
     Args:
         default: <string> path to default directory for interactive window
+        title: <string> window title
         dir_path: <bool> if True, find path looks for a directory path
-        file_path: <bool> if True, find path looks for a file path
+        file_path: <bool> if True, find path looks for a file path, returns
+                   tuple of file paths
         file_type: <string> if file_path true, file_type must be of the form
                    "[(file type, *.file extension)]"
     Returns:
@@ -100,11 +101,11 @@ def find_path(default,
     path = 'Please Select dir_path or file_path'
     if dir_path:
         path = filedialog.askdirectory(initialdir=default,
-                                       title='Select a Directory')
+                                       title=title)
     if file_path:
-        path = filedialog.askopenfilename(initialdir=default,
-                                          filetypes=file_type,
-                                          title='Select a File')
+        path = filedialog.askopenfilenames(initialdir=default,
+                                           filetypes=file_type,
+                                           title=title)
     return path
 
 
@@ -160,3 +161,18 @@ def get_sample_name(file, index):
     file_split = file.split('_')
     sample_name = file_split[index]
     return sample_name
+
+
+def nonblank_lines(file_path):
+    '''
+    Uses a generator to strip lines and return only lines from a file that
+    contain information.
+    Args:
+        file_path: <string> path to file
+    Returns:
+        line: <array> non-blank line from file
+    '''
+    for lines in file_path:
+        line = lines.rstrip()
+        if line:
+            yield line
