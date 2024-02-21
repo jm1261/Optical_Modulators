@@ -33,9 +33,10 @@ for x, t in enumerate(thicknesses):
     for y, b_in in enumerate(beta_in):
         beta_matrix_out[x, y] = abs(pm.multilayer_opt(b_in, t, indices, k0))
         try:
-            beta_out, r = opt.newton(pm.multilayer_opt, x0=b_in,
-                                     args=(t, indices, k0), maxiter=1000,
-                                     tol=1e-10, full_output=True)
+            beta_out, r = opt.newton(
+                pm.multilayer_opt, x0=b_in,
+                args=(t, indices, k0), maxiter=1000,
+                tol=1e-10, full_output=True)
         except:
             beta_out = k0
         if abs(pm.multilayer_opt(beta_out, t, indices, k0).real) < 0.1:
